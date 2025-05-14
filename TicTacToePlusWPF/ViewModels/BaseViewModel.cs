@@ -5,10 +5,28 @@ using System.Text;
 using System.Threading.Tasks;
 
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
-public class BaseViewModel : INotifyPropertyChanged
+namespace TicTacToePlusWPF.ViewModels
 {
-    public event PropertyChangedEventHandler PropertyChanged;
-    protected void OnPropertyChanged(string name) =>
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+    public class BaseViewModel : INotifyPropertyChanged
+    {
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string? name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
+        protected bool SetProperty<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+        {
+            if (!Equals(field, value))
+            {
+                field = value;
+                OnPropertyChanged(propertyName);
+                return true;
+            }
+            return false;
+        }
+    }
 }

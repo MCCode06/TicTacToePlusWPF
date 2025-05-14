@@ -2,8 +2,10 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:TicTacToePlusWPF"
+             xmlns:local1="clr-namespace:TicTacToePlusWPF.Models"
+
              StartupUri="Views/MainView.xaml">
     <Application.Resources>
-         
+        <local1:GameSettings x:Key="GameSettings"></local1:GameSettings>
     </Application.Resources>
 </Application>

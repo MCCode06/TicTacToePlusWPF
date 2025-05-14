@@ -1,41 +1,47 @@
-﻿using System.Windows.Input;
+﻿using System.Windows;
+using System.Windows.Input;
+using TicTacToePlusWPF.Services;
+using TicTacToePlusWPF.Views;
 
 namespace TicTacToePlusWPF.ViewModels
 {
     public class MainViewModel : BaseViewModel
     {
-        public ICommand StartGameCommand { get; set; }
-        public ICommand OpenSettingsCommand { get; set; }
-        public ICommand OpenHelpCommand { get; set; }
-        public ICommand ExitCommand { get; set; }
+        private readonly INavigationService _navigationService;
 
-        public MainViewModel()
+        public ICommand StartGameCommand { get; }
+        public ICommand OpenSettingsCommand { get; }
+        public ICommand OpenHelpCommand { get; }
+        public ICommand ExitCommand { get; }
+
+        public MainViewModel(INavigationService navigationService)
         {
-            StartGameCommand = new RelayCommand(StartGame);
-            OpenSettingsCommand = new RelayCommand(OpenSettings);
-            OpenHelpCommand = new RelayCommand(OpenHelp);
-            ExitCommand = new RelayCommand(Exit);
+            _navigationService = navigationService;
+
+            StartGameCommand = new RelayCommand(OpenGameView);
+            OpenSettingsCommand = new RelayCommand(OpenSettingsView);
+            OpenHelpCommand = new RelayCommand(OpenHelpView);
+            ExitCommand = new RelayCommand(ExitApp);
         }
 
-        private void StartGame()
+        private void OpenGameView(object obj)
         {
-            // Logic to start the game
+            _navigationService.NavigateToGameView();
         }
 
-        private void OpenSettings()
+        private void OpenSettingsView(object obj)
         {
-            // Logic to open settings
+            _navigationService.NavigateToSettingsView();
         }
 
-        private void OpenHelp()
+        private void OpenHelpView(object obj)
         {
-            // Logic to open help
+            // Handle Help View
         }
 
-        private void Exit()
+        private void ExitApp(object obj)
         {
-            // Logic to exit the game
-            System.Windows.Application.Current.Shutdown();
+            Application.Current.Shutdown();
         }
     }
 }

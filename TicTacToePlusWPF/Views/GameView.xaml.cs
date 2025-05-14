@@ -1,27 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Windows.Controls;
+using TicTacToePlusWPF.ViewModels;
+using TicTacToePlusWPF.Services;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace TicTacToePlusWPF.Views
 {
-    /// <summary>
-    /// Interaction logic for GameView.xaml
-    /// </summary>
-    public partial class GameView : Window
+    public partial class GameView : UserControl
     {
         public GameView()
         {
             InitializeComponent();
+            Loaded += GameView_Loaded;
+        }
+
+        private void GameView_Loaded(object sender, RoutedEventArgs e)
+        {
+            var mainWindow = Window.GetWindow(this);
+            if (mainWindow != null)
+            {
+                var navigationService = new NavigationService(mainWindow);
+                var gameViewModel = new GameViewModel(navigationService);
+                DataContext = gameViewModel;
+            }
+            else
+            {
+                MessageBox.Show("Main window is not found.");
+            }
+
+            Loaded -= GameView_Loaded; // detach the event
         }
     }
 }

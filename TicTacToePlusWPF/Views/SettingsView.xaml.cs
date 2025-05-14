@@ -11,17 +11,23 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using TicTacToePlusWPF.Models;
+using TicTacToePlusWPF.ViewModels;
+using TicTacToePlusWPF.Services;
 
 namespace TicTacToePlusWPF.Views
 {
     /// <summary>
     /// Interaction logic for SettingsView.xaml
     /// </summary>
-    public partial class SettingsView : Window
+    public partial class SettingsView : UserControl
     {
         public SettingsView()
         {
             InitializeComponent();
+            var navigationService = new NavigationService(Application.Current.MainWindow);
+            var settingsViewModel = new SettingsViewModel(new GameSettings(), navigationService);
+            DataContext = settingsViewModel;
         }
     }
 }

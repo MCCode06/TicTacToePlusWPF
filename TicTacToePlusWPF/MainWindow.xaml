@@ -1,0 +1,25 @@
+﻿<Window x:Class="TicTacToePlusWPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:TicTacToePlusWPF.Views"
+        Title="Tic Tac Toe Plus" Height="450" Width="800"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Background="Black"
+        Foreground="White">
+    <Grid>
+        <!-- Title -->
+        <TextBlock Text="TIC TAC TOE PLUS"
+                   FontSize="36"
+                   FontWeight="Bold"
+                   FontFamily="Consolas"
+                   HorizontalAlignment="Center"
+                   Margin="0,30,0,10"
+                   TextAlignment="Center"
+                   TextWrapping="Wrap" />
+
+        <!-- ContentControl for Dynamic View Loading -->
+        <ContentControl Name="MainContent" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+
+    </Grid>
+</Window>
