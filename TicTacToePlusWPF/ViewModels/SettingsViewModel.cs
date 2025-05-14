@@ -66,15 +66,18 @@ namespace TicTacToePlusWPF.ViewModels
             set
             {
                 int maxPlayers = Math.Min(10, (GridRows * GridColumns - 1) / (WinCondition - 1) - 1);
-                if (value >= 2 && value <= maxPlayers)
+                if (value >= 2 && value <= maxPlayers && value != Settings.PlayerCount)
                 {
                     Settings.PlayerCount = value;
                     OnPropertyChanged();
+
+                    UpdatePlayerSymbols();
                 }
             }
         }
 
-        public ObservableCollection<char> PlayerSymbols { get; set; }
+
+        public ObservableCollection<PlayerSymbolViewModel> PlayerSymbols { get; set; }
 
         public ICommand SaveSettingsCommand { get; }
         public ICommand SwapSymbolsCommand { get; }
@@ -84,7 +87,8 @@ namespace TicTacToePlusWPF.ViewModels
         public SettingsViewModel(GameSettings settings, INavigationService navigationService)
         {
             Settings = settings;
-            PlayerSymbols = new ObservableCollection<char>(settings.PlayerSymbols);
+            PlayerSymbols = new ObservableCollection<PlayerSymbolViewModel>(settings.PlayerSymbols.Select(s => new PlayerSymbolViewModel(s)));
+
             _navigationService = navigationService;
 
             SaveSettingsCommand = new RelayCommand(SaveSettings);
@@ -106,11 +110,32 @@ namespace TicTacToePlusWPF.ViewModels
             OnPropertyChanged(nameof(PlayerCount));
         }
 
+        private void UpdatePlayerSymbols()
+        {
+            while (PlayerSymbols.Count < PlayerCount)
+            {
+                char newSymbol = (char)('A' + PlayerSymbols.Count);
+                if (PlayerSymbols.Any(p => p.Symbol == newSymbol)) { newSymbol = '?'; }
+
+                PlayerSymbols.Add(new PlayerSymbolViewModel(newSymbol));
+            }
+
+            while (PlayerSymbols.Count > PlayerCount)
+            {
+                PlayerSymbols.RemoveAt(PlayerSymbols.Count - 1);
+            }
+
+            OnPropertyChanged(nameof(PlayerSymbols));
+        }
+
+
+
         private void SaveSettings(object parameter)
         {
-            Settings.PlayerSymbols = PlayerSymbols.ToList();
+            Settings.PlayerSymbols = PlayerSymbols.Select(ps => ps.Symbol).ToList();
             _navigationService.NavigateToMainView();
         }
+
 
         private void SwapSymbols(object parameter)
         {

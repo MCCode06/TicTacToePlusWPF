@@ -26,7 +26,7 @@ namespace TicTacToePlusWPF.Views
         {
             InitializeComponent();
             var navigationService = new NavigationService(Application.Current.MainWindow);
-            var settingsViewModel = new SettingsViewModel(new GameSettings(), navigationService);
+            var settingsViewModel = new SettingsViewModel(App.GameSettingsInstance, navigationService);
             DataContext = settingsViewModel;
         }
     }

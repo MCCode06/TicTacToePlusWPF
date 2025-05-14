@@ -4,26 +4,79 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="800"
-             Background="Black">
+             Background="#1e1e1e">
 
     <Grid Margin="20">
-        <ItemsControl ItemsSource="{Binding Cells}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Margin="0,0,0,15">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="{Binding PlayerTurnDisplay}" 
+                       FontSize="22" 
+                       FontWeight="SemiBold"
+                       Foreground="White" 
+                       VerticalAlignment="Center" 
+                       Grid.Column="0" />
+
+            <Button Content="🔄 Restart" 
+                    Command="{Binding RestartCommand}" 
+                    Margin="5,0,0,0"
+                    Padding="12,6"
+                    Background="#e0e0e0"
+                    FontWeight="Bold"
+                    Grid.Column="1" />
+
+            <Button Content="🏠 Back to Menu" 
+                    Command="{Binding BackToMenuCommand}" 
+                    Margin="10,0,0,0"
+                    Padding="12,6"
+                    Background="#e0e0e0"
+                    FontWeight="Bold"
+                    Grid.Column="2" />
+        </Grid>
+
+        <ItemsControl Grid.Row="1" ItemsSource="{Binding Cells}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <UniformGrid Rows="{Binding GridRows}" Columns="{Binding GridColumns}" />
+                    <UniformGrid Rows="{Binding GridRows}" 
+                                 Columns="{Binding GridColumns}"
+                                 HorizontalAlignment="Stretch" 
+                                 VerticalAlignment="Stretch"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
 
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Button Command="{Binding ClickCommand}" 
-                            Content="{Binding Symbol}" 
-                            FontSize="24"
-                            FontWeight="Bold"
-                            Margin="3"
-                            Background="White"
-                            Foreground="Black" />
+                    <Border CornerRadius="8" 
+                            Background="#ffffff" 
+                            Margin="4"
+                            SnapsToDevicePixels="True"
+                            BorderBrush="#cccccc"
+                            BorderThickness="1">
+                        <Button Command="{Binding ClickCommand}" 
+                                CommandParameter="{Binding}"
+                                Content="{Binding Symbol}" 
+                                FontSize="28"
+                                FontWeight="Bold"
+                                Foreground="Black"
+                                Background="Transparent"
+                                BorderThickness="0">
+                            <Button.Effect>
+                                <DropShadowEffect Color="Black" 
+                                                  Direction="320" 
+                                                  ShadowDepth="4" 
+                                                  BlurRadius="8"/>
+                            </Button.Effect>
+                        </Button>
+                    </Border>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>

@@ -1,62 +1,40 @@
-﻿using System.Windows;
+﻿// NavigationService.cs
+using System;
+using System.Windows;
 using System.Windows.Controls;
-using TicTacToePlusWPF.Views;
+using System.Windows.Media.Animation;
 
 namespace TicTacToePlusWPF.Services
 {
     public class NavigationService : INavigationService
     {
-        private readonly Window _mainWindow;
+        private readonly ContentControl _contentControl;
 
-        // Ensure that the window is passed correctly to the service
-        public NavigationService(Window mainWindow)
+        public NavigationService(ContentControl contentControl)
         {
-            _mainWindow = mainWindow ?? throw new ArgumentNullException(nameof(mainWindow));
+            _contentControl = contentControl ?? throw new ArgumentNullException(nameof(contentControl));
         }
 
-        public void NavigateToMainView()
+        private void AnimateAndSetContent(UserControl newView)
         {
-            var mainView = new MainView();  
-            var contentControl = _mainWindow.Content as ContentControl;
+            var fadeOut = new DoubleAnimation(1, 0, TimeSpan.FromMilliseconds(200));
+            var fadeIn = new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(200));
 
-            if (contentControl != null)
+            fadeOut.Completed += (s, e) =>
             {
-                contentControl.Content = mainView;  
-            }
+                _contentControl.Content = newView;
+                newView.BeginAnimation(UIElement.OpacityProperty, fadeIn);
+            };
+
+            if (_contentControl.Content is UserControl oldView)
+                oldView.BeginAnimation(UIElement.OpacityProperty, fadeOut);
             else
-            {
-                throw new InvalidOperationException("MainContent ContentControl not found.");
-            }
+                AnimateAndSetContent(newView); 
         }
 
-        public void NavigateToSettingsView()
-        {
-            var settingsView = new SettingsView();  
-            var contentControl = _mainWindow.Content as ContentControl;
-
-            if (contentControl != null)
-            {
-                contentControl.Content = settingsView;
-            }
-            else
-            {
-                throw new InvalidOperationException("MainContent ContentControl not found.");
-            }
-        }
-
-        public void NavigateToGameView()
-        {
-            var gameView = new GameView();  
-            var contentControl = _mainWindow.Content as ContentControl;
-
-            if (contentControl != null)
-            {
-                contentControl.Content = gameView;
-            }
-            else
-            {
-                throw new InvalidOperationException("MainContent ContentControl not found.");
-            }
-        }
+        public void NavigateToMainView() => AnimateAndSetContent(new Views.MainView());
+        public void NavigateToSettingsView() => AnimateAndSetContent(new Views.SettingsView());
+        public void NavigateToGameView() => AnimateAndSetContent(new Views.GameView());
+        public void NavigateToGreetingView() => AnimateAndSetContent(new Views.GreetingView());
     }
 }

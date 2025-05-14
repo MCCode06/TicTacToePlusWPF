@@ -10,7 +10,7 @@ namespace TicTacToePlusWPF
         {
             InitializeComponent();
 
-            var navigationService = new NavigationService(this);
+            var navigationService = new NavigationService(MainContent);
 
             var mainViewModel = new MainViewModel(navigationService);
 

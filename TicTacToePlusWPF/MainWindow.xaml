@@ -8,7 +8,12 @@
         Background="Black"
         Foreground="White">
     <Grid>
-        <!-- Title -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        
         <TextBlock Text="TIC TAC TOE PLUS"
                    FontSize="36"
                    FontWeight="Bold"
@@ -19,7 +24,11 @@
                    TextWrapping="Wrap" />
 
         <!-- ContentControl for Dynamic View Loading -->
-        <ContentControl Name="MainContent" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-
+        <ContentControl x:Name="MainContent"
+                        Grid.Row="1"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Opacity="1" />
+        
     </Grid>
 </Window>

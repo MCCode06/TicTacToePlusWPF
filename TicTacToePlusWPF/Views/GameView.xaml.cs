@@ -9,25 +9,15 @@ namespace TicTacToePlusWPF.Views
     {
         public GameView()
         {
-            InitializeComponent();
-            Loaded += GameView_Loaded;
-        }
-
-        private void GameView_Loaded(object sender, RoutedEventArgs e)
-        {
-            var mainWindow = Window.GetWindow(this);
+            var mainWindow = Application.Current.MainWindow;
             if (mainWindow != null)
             {
                 var navigationService = new NavigationService(mainWindow);
-                var gameViewModel = new GameViewModel(navigationService);
-                DataContext = gameViewModel;
-            }
-            else
-            {
-                MessageBox.Show("Main window is not found.");
+                DataContext = new GameViewModel(navigationService);
             }
 
-            Loaded -= GameView_Loaded; // detach the event
+            InitializeComponent();
         }
     }
+
 }
