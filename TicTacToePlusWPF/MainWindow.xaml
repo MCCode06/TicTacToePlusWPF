@@ -5,8 +5,7 @@
         Title="Tic Tac Toe Plus" Height="450" Width="800"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
-        Background="Black"
-        Foreground="White">
+        Background="{DynamicResource BackgroundBrush}" Foreground="{DynamicResource ForegroundBrush}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -21,9 +20,8 @@
                    HorizontalAlignment="Center"
                    Margin="0,30,0,10"
                    TextAlignment="Center"
-                   TextWrapping="Wrap" />
+                   TextWrapping="Wrap"/>
 
-        <!-- ContentControl for Dynamic View Loading -->
         <ContentControl x:Name="MainContent"
                         Grid.Row="1"
                         HorizontalAlignment="Stretch"

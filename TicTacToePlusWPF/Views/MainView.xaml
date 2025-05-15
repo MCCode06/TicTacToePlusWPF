@@ -5,7 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:TicTacToePlusWPF.Views" xmlns:local1="clr-namespace:TicTacToePlusWPF.ViewModels"
              mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="800" Background="White">
+             d:DesignHeight="450" d:DesignWidth="800" Background="{DynamicResource BackgroundBrush}" Foreground="{DynamicResource ForegroundBrush}">
     
     <Grid>
         <Grid.RowDefinitions>
@@ -13,8 +13,21 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
+
+        
+        <Button Content="🌓"
+        ToolTip="Toggle Theme"
+        HorizontalAlignment="Right"
+        VerticalAlignment="Top"
+        FontSize="16"
+        Padding="5"
+        Margin="10"
+        Click="ThemeToggleButton_Click"/>
+
+
         <!-- Title -->
-        <TextBlock Text="TIC TAC TOE PLUS"
+        <TextBlock Background="{DynamicResource BackgroundBrush}" Foreground="{DynamicResource ForegroundBrush}"
+                   Text="TIC TAC TOE PLUS"
                    FontSize="36"
                    FontWeight="Bold"
                    FontFamily="Consolas"

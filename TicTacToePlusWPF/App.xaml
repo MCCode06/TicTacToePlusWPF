@@ -6,6 +6,12 @@
 
              StartupUri="Views/MainView.xaml">
     <Application.Resources>
-        <local1:GameSettings x:Key="GameSettings"></local1:GameSettings>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/DarkTheme.xaml" />
+                <ResourceDictionary Source="/Resources/LightTheme.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <local1:GameSettings x:Key="GameSettings"></local1:GameSettings>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

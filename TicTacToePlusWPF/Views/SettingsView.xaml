@@ -5,9 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TicTacToePlusWPF.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" Background="White">
+             d:DesignHeight="450" d:DesignWidth="800" Background="{DynamicResource BackgroundBrush}" Foreground="{DynamicResource ForegroundBrush}">
 
-    <StackPanel Margin="40" VerticalAlignment="Center" HorizontalAlignment="Center">
+    <StackPanel Margin="40" VerticalAlignment="Center" HorizontalAlignment="Center" >
         <TextBlock Text="Game Settings" FontSize="28" FontWeight="Bold" Margin="0,0,0,30"/>
 
         <!-- Input grid for basic settings -->
@@ -37,7 +37,8 @@
         </Grid>
 
         <!-- Player Symbols -->
-        <TextBlock Text="Player Symbols:" FontWeight="SemiBold" Margin="0,0,0,10"/>
+        <TextBlock  Background="{DynamicResource BackgroundBrush}" Foreground="{DynamicResource ForegroundBrush}"
+                    Text="Player Symbols:" FontWeight="SemiBold" Margin="0,0,0,10"/>
 
         <ItemsControl ItemsSource="{Binding PlayerSymbols}">
             <ItemsControl.ItemsPanel>
@@ -47,7 +48,8 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <TextBox Text="{Binding Symbol, UpdateSourceTrigger=PropertyChanged}" 
+                    <TextBox Background="{DynamicResource BackgroundBrush}" Foreground="{DynamicResource ForegroundBrush}"
+                             Text="{Binding Symbol, UpdateSourceTrigger=PropertyChanged}" 
                              Width="40" Height="40" Margin="5"
                              FontSize="16" FontWeight="Bold" TextAlignment="Center"/>
                 </DataTemplate>
@@ -55,7 +57,8 @@
         </ItemsControl>
 
         <!-- Save Button -->
-        <Button Content="Save Settings" 
+        <Button Background="{DynamicResource BackgroundBrush}" Foreground="{DynamicResource ForegroundBrush}"
+                Content="Save Settings" 
                 Command="{Binding SaveSettingsCommand}" 
                 Margin="0,30,0,0" Padding="10,5"
                 Width="150" HorizontalAlignment="Center"/>

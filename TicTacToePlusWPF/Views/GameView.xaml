@@ -4,7 +4,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             Background="#1e1e1e">
+             Background="{DynamicResource BackgroundBrush}" Foreground="{DynamicResource ForegroundBrush}">
 
     <Grid Margin="20">
         <Grid.RowDefinitions>
@@ -22,7 +22,6 @@
             <TextBlock Text="{Binding PlayerTurnDisplay}" 
                        FontSize="22" 
                        FontWeight="SemiBold"
-                       Foreground="White" 
                        VerticalAlignment="Center" 
                        Grid.Column="0" />
 
@@ -30,7 +29,6 @@
                     Command="{Binding RestartCommand}" 
                     Margin="5,0,0,0"
                     Padding="12,6"
-                    Background="#e0e0e0"
                     FontWeight="Bold"
                     Grid.Column="1" />
 
@@ -38,7 +36,6 @@
                     Command="{Binding BackToMenuCommand}" 
                     Margin="10,0,0,0"
                     Padding="12,6"
-                    Background="#e0e0e0"
                     FontWeight="Bold"
                     Grid.Column="2" />
         </Grid>
@@ -66,8 +63,7 @@
                                 Content="{Binding Symbol}" 
                                 FontSize="28"
                                 FontWeight="Bold"
-                                Foreground="Black"
-                                Background="Transparent"
+
                                 BorderThickness="0">
                             <Button.Effect>
                                 <DropShadowEffect Color="Black" 

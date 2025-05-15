@@ -39,5 +39,10 @@ namespace TicTacToePlusWPF.Views
 
             Loaded -= MainView_Loaded; // detach the event
         }
+
+        private void ThemeToggleButton_Click(object sender, RoutedEventArgs e)
+        {
+            Services.ThemeManager.ToggleTheme();
+        }
     }
 }
