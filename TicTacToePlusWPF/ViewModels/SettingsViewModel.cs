@@ -21,7 +21,7 @@ namespace TicTacToePlusWPF.ViewModels
                     OnPropertyChanged();
                     AdjustWinCondition();
                     UpdatePlayerLimit();
-                    CommandManager.InvalidateRequerySuggested(); // Refresh Save button state
+                    CommandManager.InvalidateRequerySuggested(); 
                 }
             }
         }
@@ -175,7 +175,7 @@ namespace TicTacToePlusWPF.ViewModels
                             error = $"Win Condition must be between 3 and {maxAllowed}.";
                         break;
                     case nameof(PlayerCount):
-                        int safeWinCondition = Math.Max(2, WinCondition); // Prevent zero or negative divisor
+                        int safeWinCondition = Math.Max(2, WinCondition); 
                         int maxPlayers = Math.Min(10, (GridRows * GridColumns - 1) / (safeWinCondition - 1) - 1);
                         if (PlayerCount < 2 || PlayerCount > maxPlayers)
                             error = $"Player Count must be between 2 and {maxPlayers}.";
