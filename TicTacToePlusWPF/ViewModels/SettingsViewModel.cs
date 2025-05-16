@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows.Input;
 using TicTacToePlusWPF.Models;
 using TicTacToePlusWPF.Services;
 
 namespace TicTacToePlusWPF.ViewModels
 {
-    public class SettingsViewModel : BaseViewModel
+    public class SettingsViewModel : BaseViewModel, IDataErrorInfo
     {
         public GameSettings Settings { get; set; }
 
@@ -20,12 +15,13 @@ namespace TicTacToePlusWPF.ViewModels
             get => Settings.GridRows;
             set
             {
-                if (value > 0)
+                if (value != Settings.GridRows)
                 {
                     Settings.GridRows = value;
                     OnPropertyChanged();
                     AdjustWinCondition();
                     UpdatePlayerLimit();
+                    CommandManager.InvalidateRequerySuggested(); // Refresh Save button state
                 }
             }
         }
@@ -35,12 +31,13 @@ namespace TicTacToePlusWPF.ViewModels
             get => Settings.GridColumns;
             set
             {
-                if (value > 0)
+                if (value != Settings.GridColumns)
                 {
                     Settings.GridColumns = value;
                     OnPropertyChanged();
                     AdjustWinCondition();
                     UpdatePlayerLimit();
+                    CommandManager.InvalidateRequerySuggested();
                 }
             }
         }
@@ -51,7 +48,7 @@ namespace TicTacToePlusWPF.ViewModels
             set
             {
                 int maxAllowed = Math.Min(GridRows, GridColumns);
-                if (value >= 3 && value <= maxAllowed)
+                if (value >= 2 && value <= maxAllowed) 
                 {
                     Settings.WinCondition = value;
                     OnPropertyChanged();
@@ -60,22 +57,22 @@ namespace TicTacToePlusWPF.ViewModels
             }
         }
 
+
         public int PlayerCount
         {
             get => Settings.PlayerCount;
             set
             {
                 int maxPlayers = Math.Min(10, (GridRows * GridColumns - 1) / (WinCondition - 1) - 1);
-                if (value >= 2 && value <= maxPlayers && value != Settings.PlayerCount)
+                if (value != Settings.PlayerCount)
                 {
                     Settings.PlayerCount = value;
                     OnPropertyChanged();
-
                     UpdatePlayerSymbols();
+                    CommandManager.InvalidateRequerySuggested();
                 }
             }
         }
-
 
         public ObservableCollection<PlayerSymbolViewModel> PlayerSymbols { get; set; }
 
@@ -91,7 +88,7 @@ namespace TicTacToePlusWPF.ViewModels
 
             _navigationService = navigationService;
 
-            SaveSettingsCommand = new RelayCommand(SaveSettings);
+            SaveSettingsCommand = new RelayCommand(SaveSettings, _ => !HasErrors);
             SwapSymbolsCommand = new RelayCommand(SwapSymbols);
         }
 
@@ -104,19 +101,26 @@ namespace TicTacToePlusWPF.ViewModels
 
         private void UpdatePlayerLimit()
         {
-            int maxPlayers = Math.Min(10, (GridRows * GridColumns - 1) / (WinCondition - 1) - 1);
+            int safeWinCondition = Math.Max(2, WinCondition);
+            int maxPlayers = Math.Min(10, (GridRows * GridColumns - 1) / (safeWinCondition - 1) - 1);
+
             if (Settings.PlayerCount > maxPlayers)
+            {
                 Settings.PlayerCount = maxPlayers;
-            OnPropertyChanged(nameof(PlayerCount));
+                OnPropertyChanged(nameof(PlayerCount));
+            }
         }
+
 
         private void UpdatePlayerSymbols()
         {
             while (PlayerSymbols.Count < PlayerCount)
             {
                 char newSymbol = (char)('A' + PlayerSymbols.Count);
-                if (PlayerSymbols.Any(p => p.Symbol == newSymbol)) { newSymbol = '?'; }
-
+                if (PlayerSymbols.Any(p => p.Symbol == newSymbol))
+                {
+                    newSymbol = '?';
+                }
                 PlayerSymbols.Add(new PlayerSymbolViewModel(newSymbol));
             }
 
@@ -128,14 +132,11 @@ namespace TicTacToePlusWPF.ViewModels
             OnPropertyChanged(nameof(PlayerSymbols));
         }
 
-
-
         private void SaveSettings(object parameter)
         {
             Settings.PlayerSymbols = PlayerSymbols.Select(ps => ps.Symbol).ToList();
             _navigationService.NavigateToMainView();
         }
-
 
         private void SwapSymbols(object parameter)
         {
@@ -149,6 +150,46 @@ namespace TicTacToePlusWPF.ViewModels
                 }
             }
         }
-    }
 
+
+        public string Error => null; 
+
+        public string this[string columnName]
+        {
+            get
+            {
+                string error = null;
+                switch (columnName)
+                {
+                    case nameof(GridRows):
+                        if (GridRows <= 0)
+                            error = "Grid Rows must be positive.";
+                        break;
+                    case nameof(GridColumns):
+                        if (GridColumns <= 0)
+                            error = "Grid Columns must be positive.";
+                        break;
+                    case nameof(WinCondition):
+                        int maxAllowed = Math.Min(GridRows, GridColumns);
+                        if (WinCondition < 3 || WinCondition > maxAllowed)
+                            error = $"Win Condition must be between 3 and {maxAllowed}.";
+                        break;
+                    case nameof(PlayerCount):
+                        int safeWinCondition = Math.Max(2, WinCondition); // Prevent zero or negative divisor
+                        int maxPlayers = Math.Min(10, (GridRows * GridColumns - 1) / (safeWinCondition - 1) - 1);
+                        if (PlayerCount < 2 || PlayerCount > maxPlayers)
+                            error = $"Player Count must be between 2 and {maxPlayers}.";
+                        break;
+
+                }
+                return error;
+            }
+        }
+
+        public bool HasErrors =>
+            !string.IsNullOrEmpty(this[nameof(GridRows)]) ||
+            !string.IsNullOrEmpty(this[nameof(GridColumns)]) ||
+            !string.IsNullOrEmpty(this[nameof(WinCondition)]) ||
+            !string.IsNullOrEmpty(this[nameof(PlayerCount)]);
+    }
 }

@@ -1,32 +1,105 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <!-- Global brushes -->
-    <SolidColorBrush x:Key="BackgroundBrush" Color="#1e1e1e" />
-    <SolidColorBrush x:Key="ForegroundBrush" Color="White" />
-    <SolidColorBrush x:Key="PrimaryAccentBrush" Color="#34eb34" />
+    <!-- Dark colors -->
+    <Color x:Key="BackgroundColor">#1e1e1e</Color>
+    <Color x:Key="ForegroundColor">#FFFFFF</Color>
+    <Color x:Key="PrimaryAccentColor">#34eb34</Color>
+    <Color x:Key="ButtonHoverColor">#28c528</Color>
+    <Color x:Key="ButtonPressedColor">#20a820</Color>
+    <Color x:Key="TextBoxBackgroundColor">#2a2a2a</Color>
+    <Color x:Key="TextBoxBorderColor">#555555</Color>
+    <Color x:Key="TextBoxFocusBorderColor">#34eb34</Color>
 
-    <!-- Button style -->
+    <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource BackgroundColor}" />
+    <SolidColorBrush x:Key="ForegroundBrush" Color="{StaticResource ForegroundColor}" />
+    <SolidColorBrush x:Key="PrimaryAccentBrush" Color="{StaticResource PrimaryAccentColor}" />
+    <SolidColorBrush x:Key="ButtonHoverBrush" Color="{StaticResource ButtonHoverColor}" />
+    <SolidColorBrush x:Key="ButtonPressedBrush" Color="{StaticResource ButtonPressedColor}" />
+    <SolidColorBrush x:Key="TextBoxBackgroundBrush" Color="{StaticResource TextBoxBackgroundColor}" />
+    <SolidColorBrush x:Key="TextBoxBorderBrush" Color="{StaticResource TextBoxBorderColor}" />
+    <SolidColorBrush x:Key="TextBoxFocusBorderBrush" Color="{StaticResource TextBoxFocusBorderColor}" />
+
+    <!-- Button Style -->
     <Style TargetType="Button">
         <Setter Property="Background" Value="{DynamicResource PrimaryAccentBrush}" />
         <Setter Property="Foreground" Value="{DynamicResource ForegroundBrush}" />
         <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="Margin" Value="5" />
-        <Setter Property="Padding" Value="5,2" />
+        <Setter Property="Padding" Value="8,4" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}"
+                  CornerRadius="5"
+                  BorderThickness="{TemplateBinding BorderThickness}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  SnapsToDevicePixels="True">
+                        <ContentPresenter HorizontalAlignment="Center"
+                              VerticalAlignment="Center"
+                              RecognizesAccessKey="True" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource ButtonHoverBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource ButtonPressedBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Background" Value="#777" />
+                            <Setter Property="Foreground" Value="#bbb" />
+                            <Setter Property="Cursor" Value="Arrow" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
-    <!-- TextBox style -->
+    <!-- TextBox Style -->
     <Style TargetType="TextBox">
-        <Setter Property="Background" Value="#333" />
+        <Setter Property="Background" Value="{DynamicResource TextBoxBackgroundBrush}" />
         <Setter Property="Foreground" Value="{DynamicResource ForegroundBrush}" />
-        <Setter Property="BorderBrush" Value="#555" />
+        <Setter Property="BorderBrush" Value="{DynamicResource TextBoxBorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Padding" Value="6,3" />
         <Setter Property="Margin" Value="5" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TextBox">
+                    <Border Background="{TemplateBinding Background}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}"
+                  CornerRadius="3"
+                  SnapsToDevicePixels="True">
+                        <ScrollViewer Margin="0"
+                          x:Name="PART_ContentHost" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Setter TargetName="PART_ContentHost" Property="BorderBrush" Value="{DynamicResource TextBoxFocusBorderBrush}" />
+                            <Setter Property="BorderBrush" Value="{DynamicResource TextBoxFocusBorderBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Background" Value="#444" />
+                            <Setter Property="Foreground" Value="#888" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
+    <!-- TextBlock Style -->
     <Style TargetType="TextBlock">
-        <Setter Property="Background" Value="{DynamicResource BackgroundBrush}" />
         <Setter Property="Foreground" Value="{DynamicResource ForegroundBrush}" />
-        <Setter Property="Margin" Value="5" />
+        <Setter Property="Margin" Value="5,2" />
+        <Setter Property="TextWrapping" Value="Wrap" />
     </Style>
 
 </ResourceDictionary>

@@ -4,7 +4,10 @@
         xmlns:local="clr-namespace:TicTacToePlusWPF.Views"
         Title="Tic Tac Toe Plus" Height="450" Width="800"
         WindowStartupLocation="CenterScreen"
-        ResizeMode="NoResize"
+        ResizeMode="CanResize"
+        MinHeight="400"
+        MinWidth="600"
+        
         Background="{DynamicResource BackgroundBrush}" Foreground="{DynamicResource ForegroundBrush}">
     <Grid>
         <Grid.RowDefinitions>
@@ -12,21 +15,20 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        
-        <TextBlock Text="TIC TAC TOE PLUS"
-                   FontSize="36"
-                   FontWeight="Bold"
-                   FontFamily="Consolas"
-                   HorizontalAlignment="Center"
-                   Margin="0,30,0,10"
-                   TextAlignment="Center"
-                   TextWrapping="Wrap"/>
+
+        <Viewbox Stretch="Uniform" Height="Auto" MaxHeight="150" Margin="0,30,0,10" Grid.Row="0">
+            <TextBlock Text="TIC TAC TOE PLUS"
+               FontWeight="Bold"
+               FontFamily="Consolas"
+               TextAlignment="Center"
+               TextWrapping="Wrap" />
+        </Viewbox>
 
         <ContentControl x:Name="MainContent"
-                        Grid.Row="1"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch"
-                        Opacity="1" />
+                Grid.Row="1"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Opacity="1" />
         
     </Grid>
 </Window>

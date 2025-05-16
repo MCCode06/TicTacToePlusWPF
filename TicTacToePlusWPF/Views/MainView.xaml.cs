@@ -37,12 +37,24 @@ namespace TicTacToePlusWPF.Views
                 MessageBox.Show("Main window is not found.");
             }
 
+            UpdateThemeToggleButtonContent();
+
             Loaded -= MainView_Loaded; // detach the event
         }
 
         private void ThemeToggleButton_Click(object sender, RoutedEventArgs e)
         {
             Services.ThemeManager.ToggleTheme();
+            UpdateThemeToggleButtonContent();
+        }
+
+        private void UpdateThemeToggleButtonContent()
+        {
+            if (ThemeToggleButton == null) return;
+
+            ThemeToggleButton.Content = ThemeManager.IsDarkTheme ? "🌞" : "🌙";
+            ThemeToggleButton.ToolTip = ThemeManager.IsDarkTheme ? "Switch to Light Theme" : "Switch to Dark Theme";
         }
     }
+
 }

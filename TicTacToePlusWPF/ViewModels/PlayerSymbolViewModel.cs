@@ -14,14 +14,7 @@ namespace TicTacToePlusWPF.ViewModels
         public char Symbol
         {
             get => _symbol;
-            set
-            {
-                if (_symbol != value)
-                {
-                    _symbol = value;
-                    OnPropertyChanged(nameof(Symbol));
-                }
-            }
+            set => SetProperty(ref _symbol, value);
         }
 
         public PlayerSymbolViewModel(char symbol)

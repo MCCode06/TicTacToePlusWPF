@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows;
 
 namespace TicTacToePlusWPF.Services
@@ -10,24 +11,24 @@ namespace TicTacToePlusWPF.Services
 
         private static bool _isDark = true;
 
+        public static bool IsDarkTheme => _isDark;
+
         public static void ToggleTheme()
         {
-            ResourceDictionary newTheme = new ResourceDictionary
-            {
-                Source = _isDark ? LightTheme : DarkTheme
-            };
+            Uri newThemeSource = _isDark ? LightTheme : DarkTheme;
 
-            for (int i = 0; i < Application.Current.Resources.MergedDictionaries.Count; i++)
+            var dictionaries = Application.Current.Resources.MergedDictionaries;
+
+            for (int i = dictionaries.Count - 1; i >= 0; i--)
             {
-                var dict = Application.Current.Resources.MergedDictionaries[i];
+                var dict = dictionaries[i];
                 if (dict.Source == LightTheme || dict.Source == DarkTheme)
                 {
-                    Application.Current.Resources.MergedDictionaries.RemoveAt(i);
-                    break;
+                    dictionaries.RemoveAt(i);
                 }
             }
 
-            Application.Current.Resources.MergedDictionaries.Add(newTheme);
+            dictionaries.Add(new ResourceDictionary { Source = newThemeSource });
 
             _isDark = !_isDark;
         }
