@@ -47,8 +47,6 @@ namespace TicTacToePlusWPF.ViewModels
                 _settings = new GameSettings(); 
                 MessageBox.Show("⚠️ GameSettings not found. Using default.");
             }
-
-            MessageBox.Show($"🔧 Initializing GameViewModel with grid {_settings.GridRows}x{_settings.GridColumns}");
             RestartCommand = new RelayCommand(_ => RestartGame());           
             BackToMenuCommand = new RelayCommand(_ => _navigationService.NavigateToMainView()); 
 
@@ -137,10 +135,10 @@ namespace TicTacToePlusWPF.ViewModels
         {
             string symbol = CurrentPlayerSymbol.ToString();
 
-            return CountConsecutive(row, col, 1, 0, symbol) + CountConsecutive(row, col, -1, 0, symbol) - 1 >= _settings.WinCondition || // Horizontal
-                   CountConsecutive(row, col, 0, 1, symbol) + CountConsecutive(row, col, 0, -1, symbol) - 1 >= _settings.WinCondition || // Vertical
-                   CountConsecutive(row, col, 1, 1, symbol) + CountConsecutive(row, col, -1, -1, symbol) - 1 >= _settings.WinCondition || // Diagonal \
-                   CountConsecutive(row, col, 1, -1, symbol) + CountConsecutive(row, col, -1, 1, symbol) - 1 >= _settings.WinCondition;   // Diagonal /
+            return CountConsecutive(row, col, 1, 0, symbol) + CountConsecutive(row, col, -1, 0, symbol) - 1 >= _settings.WinCondition || 
+                   CountConsecutive(row, col, 0, 1, symbol) + CountConsecutive(row, col, 0, -1, symbol) - 1 >= _settings.WinCondition || 
+                   CountConsecutive(row, col, 1, 1, symbol) + CountConsecutive(row, col, -1, -1, symbol) - 1 >= _settings.WinCondition || 
+                   CountConsecutive(row, col, 1, -1, symbol) + CountConsecutive(row, col, -1, 1, symbol) - 1 >= _settings.WinCondition;   
         }
 
         private int CountConsecutive(int row, int col, int dRow, int dCol, string symbol)
