@@ -16,6 +16,7 @@ namespace TicTacToePlusWPF
         {
             Resources["GameSettings"] = GameSettingsInstance;
             base.OnStartup(e);
+            
 
             ApplyTheme("Resources/DarkTheme.xaml");
 

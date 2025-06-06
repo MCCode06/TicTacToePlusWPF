@@ -17,6 +17,7 @@ namespace TicTacToePlusWPF.ViewModels
             get => _symbol;
             set => SetProperty(ref _symbol, value); 
         }
+
         public ICommand? ClickCommand { get; set; }
     }
 
@@ -25,7 +26,7 @@ namespace TicTacToePlusWPF.ViewModels
         private readonly INavigationService _navigationService;
         private readonly GameSettings _settings;
 
-        public ObservableCollection<GameCell> Cells { get; } = new();
+        public ObservableCollection<GameCell> Cells { get; private set; } = new();
 
         private int _currentPlayerIndex = 0;
         public char CurrentPlayerSymbol => _settings.PlayerSymbols[_currentPlayerIndex];
@@ -33,6 +34,22 @@ namespace TicTacToePlusWPF.ViewModels
         public int GridRows => _settings.GridRows;
         public int GridColumns => _settings.GridColumns;
         public string PlayerTurnDisplay => $"Player '{CurrentPlayerSymbol}' Turn";
+
+        private string _gameMessage;
+        public string GameMessage
+        {
+            get => _gameMessage;
+            set => SetProperty(ref _gameMessage, value);
+        }
+        private CancellationTokenSource? _restartCancellationTokenSource;
+
+        private string _countdownMessage;
+        public string CountdownMessage
+        {
+            get => _countdownMessage;
+            set => SetProperty(ref _countdownMessage, value);
+        }
+
         public ICommand RestartCommand { get; }
         public ICommand BackToMenuCommand { get; }
 
@@ -88,14 +105,21 @@ namespace TicTacToePlusWPF.ViewModels
 
         private void RestartGame()
         {
+            _restartCancellationTokenSource?.Cancel();
+            _restartCancellationTokenSource?.Dispose();
+            _restartCancellationTokenSource = null;
+
             _isGameOver = false;
             _currentPlayerIndex = 0;
+            GameMessage = string.Empty;
+            CountdownMessage = string.Empty;
 
             GenerateBoard();
-
             OnPropertyChanged(nameof(CurrentPlayerSymbol));
             OnPropertyChanged(nameof(PlayerTurnDisplay));
         }
+
+
 
 
 
@@ -109,27 +133,69 @@ namespace TicTacToePlusWPF.ViewModels
             if (cell == null || !string.IsNullOrWhiteSpace(cell.Symbol))
                 return;
 
-
             cell.Symbol = CurrentPlayerSymbol.ToString();
 
             if (CheckWin(row, col))
             {
                 _isGameOver = true;
-                MessageBox.Show($"🎉 Player '{CurrentPlayerSymbol}' wins!", "Game Over");
+                GameMessage = $"🎉 Player '{CurrentPlayerSymbol}' wins!";
+                StartAutoRestartTimer();
                 return;
             }
 
             if (Cells.All(c => !string.IsNullOrWhiteSpace(c.Symbol)))
             {
                 _isGameOver = true;
-                MessageBox.Show("🤝 It's a draw!", "Game Over");
+                GameMessage = "🤝 It's a draw!";
+                StartAutoRestartTimer();
                 return;
             }
 
             _currentPlayerIndex = (_currentPlayerIndex + 1) % _settings.PlayerCount;
             OnPropertyChanged(nameof(CurrentPlayerSymbol));
             OnPropertyChanged(nameof(PlayerTurnDisplay));
+
+            if (!_isGameOver && _settings.IsVsAi && _currentPlayerIndex == 1)
+            {
+                Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    var (aiRow, aiCol) = MinimaxAIService.FindBestMove(Cells.ToList(), _settings, _settings.PlayerSymbols[1], _settings.PlayerSymbols[0]);
+                    HandleCellClick(aiRow, aiCol);
+                }));
+            }
         }
+
+        private async void StartAutoRestartTimer()
+        {
+            _restartCancellationTokenSource?.Cancel();
+            _restartCancellationTokenSource?.Dispose();
+
+            _restartCancellationTokenSource = new CancellationTokenSource();
+            var token = _restartCancellationTokenSource.Token;
+
+            try
+            {
+                for (int secondsLeft = 10; secondsLeft > 0; secondsLeft--)
+                {
+                    CountdownMessage = $"⏳ Restarting in {secondsLeft} second{(secondsLeft == 1 ? "" : "s")}...";
+                    await Task.Delay(1000, token);
+                }
+
+                if (!token.IsCancellationRequested)
+                {
+                    CountdownMessage = string.Empty;
+                    RestartGame();
+                }
+            }
+            catch (TaskCanceledException)
+            {
+                CountdownMessage = string.Empty;
+            }
+        }
+
+
+
+
 
         private bool CheckWin(int row, int col)
         {

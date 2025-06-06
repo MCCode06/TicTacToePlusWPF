@@ -11,9 +11,14 @@
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <!-- Top bar -->
+            <RowDefinition Height="Auto"/>
+            <!-- Message -->
             <RowDefinition Height="*"/>
+            <!-- Game grid -->
         </Grid.RowDefinitions>
 
+        <!-- Top bar -->
         <Grid Grid.Row="0" Margin="0,0,0,15">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -22,56 +27,78 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock Text="{Binding PlayerTurnDisplay}" 
-                       FontSize="22" 
-                       FontWeight="SemiBold"
-                       VerticalAlignment="Center" 
-                       Grid.Column="0" />
+                   FontSize="22" 
+                   FontWeight="SemiBold"
+                   VerticalAlignment="Center" 
+                   Grid.Column="0" />
+            
 
             <Button Content="🔄 Restart" 
-                    Command="{Binding RestartCommand}" 
-                    Margin="5,0,0,0"
-                    Padding="12,6"
-                    FontWeight="Bold"
-                    Grid.Column="1" />
+                Command="{Binding RestartCommand}" 
+                Margin="5,0,0,0"
+                Padding="12,6"
+                FontWeight="Bold"
+                Grid.Column="1" />
 
             <Button Content="🏠 Back to Menu" 
-                    Command="{Binding BackToMenuCommand}" 
-                    Margin="10,0,0,0"
-                    Padding="12,6"
-                    FontWeight="Bold"
-                    Grid.Column="2" />
+                Command="{Binding BackToMenuCommand}" 
+                Margin="10,0,0,0"
+                Padding="12,6"
+                FontWeight="Bold"
+                Grid.Column="2" />
         </Grid>
 
-        <ItemsControl Grid.Row="1" ItemsSource="{Binding Cells}">
+        <!-- Game message -->
+        <StackPanel Grid.Row="1"
+            HorizontalAlignment="Center"
+            Margin="0,0,0,15">
+            <TextBlock Text="{Binding GameMessage}" 
+               FontSize="20"
+               FontWeight="Bold"
+               Foreground="Green"
+               TextAlignment="Center"
+               Visibility="{Binding GameMessage, Converter={StaticResource StringToVisibilityConverter}}" />
+
+            <TextBlock Text="{Binding CountdownMessage}"
+               FontSize="18"
+               FontStyle="Italic"
+               Foreground="Orange"
+               Margin="0,6,0,0"
+               TextAlignment="Center"
+               Visibility="{Binding CountdownMessage, Converter={StaticResource StringToVisibilityConverter}}" />
+        </StackPanel>
+        
+        
+        <!-- Game board -->
+        <ItemsControl Grid.Row="2" ItemsSource="{Binding Cells}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <UniformGrid Rows="{Binding GridRows}" 
-                                 Columns="{Binding GridColumns}"
-                                 HorizontalAlignment="Stretch" 
-                                 VerticalAlignment="Stretch"/>
+                             Columns="{Binding GridColumns}"
+                             HorizontalAlignment="Stretch" 
+                             VerticalAlignment="Stretch"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
 
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Border CornerRadius="8" 
-                            Background="#ffffff" 
-                            Margin="4"
-                            SnapsToDevicePixels="True"
-                            BorderBrush="#cccccc"
-                            BorderThickness="1">
+                        Background="#ffffff" 
+                        Margin="4"
+                        SnapsToDevicePixels="True"
+                        BorderBrush="#cccccc"
+                        BorderThickness="1">
                         <Button Command="{Binding ClickCommand}" 
-                                CommandParameter="{Binding}"
-                                Content="{Binding Symbol}" 
-                                FontSize="28"
-                                FontWeight="Bold"
-
-                                BorderThickness="0">
+                            CommandParameter="{Binding}"
+                            Content="{Binding Symbol}" 
+                            FontSize="28"
+                            FontWeight="Bold"
+                            BorderThickness="0">
                             <Button.Effect>
                                 <DropShadowEffect Color="Black" 
-                                                  Direction="320" 
-                                                  ShadowDepth="4" 
-                                                  BlurRadius="8"/>
+                                              Direction="320" 
+                                              ShadowDepth="4" 
+                                              BlurRadius="8"/>
                             </Button.Effect>
                         </Button>
                     </Border>
@@ -79,4 +106,5 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
     </Grid>
+
 </UserControl>

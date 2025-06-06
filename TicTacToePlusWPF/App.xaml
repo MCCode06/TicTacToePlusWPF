@@ -3,8 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:TicTacToePlusWPF"
              xmlns:local1="clr-namespace:TicTacToePlusWPF.Models"
+             xmlns:services="clr-namespace:TicTacToePlusWPF.Services"
 
-             StartupUri="Views/MainView.xaml">
+             StartupUri="Views/MainNavigationWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -12,6 +13,7 @@
                 <ResourceDictionary Source="/Resources/LightTheme.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <local1:GameSettings x:Key="GameSettings"></local1:GameSettings>
+            <services:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

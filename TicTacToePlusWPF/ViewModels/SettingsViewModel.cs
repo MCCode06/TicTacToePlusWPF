@@ -74,6 +74,27 @@ namespace TicTacToePlusWPF.ViewModels
             }
         }
 
+        public bool IsVsAi
+        {
+            get => Settings.IsVsAi;
+            set
+            {
+                if (Settings.IsVsAi != value)
+                {
+                    Settings.IsVsAi = value;
+                    OnPropertyChanged(nameof(IsVsAi));
+
+                    if (value)
+                    {
+                        Settings.PlayerCount = 2;
+                        OnPropertyChanged(nameof(PlayerCount));
+                        UpdatePlayerSymbols();
+                    }
+                    CommandManager.InvalidateRequerySuggested();
+                }
+            }
+        }
+
         public ObservableCollection<PlayerSymbolViewModel> PlayerSymbols { get; set; }
 
         public ICommand SaveSettingsCommand { get; }

@@ -42,6 +42,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="150"/>
@@ -60,9 +61,14 @@
             <TextBox Style="{StaticResource UniformTextBoxStyle}" Text="{Binding WinCondition, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                      Grid.Row="2" Grid.Column="1" Background="{DynamicResource BackgroundBrush}" Foreground="{DynamicResource ForegroundBrush}"/>
 
-            <TextBlock Text="Player Count:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"/>
+            <TextBlock Text="Play Versus AI:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Bottom"/>
+            <CheckBox Grid.Row="3" Grid.Column="1" IsChecked="{Binding IsVsAi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                      Margin="0,10,0,0" HorizontalAlignment="Right" VerticalAlignment="Center" Background="{DynamicResource BackgroundBrush}" Foreground="{DynamicResource ForegroundBrush}" />
+
+
+            <TextBlock Text="Player Count:" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center"/>
             <TextBox Style="{StaticResource UniformTextBoxStyle}" Text="{Binding PlayerCount, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                     Grid.Row="3" Grid.Column="1" Background="{DynamicResource BackgroundBrush}" Foreground="{DynamicResource ForegroundBrush}"/>
+                     Grid.Row="4" Grid.Column="1" Background="{DynamicResource BackgroundBrush}" Foreground="{DynamicResource ForegroundBrush}"/>
         </Grid>
 
 

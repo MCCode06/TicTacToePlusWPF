@@ -13,6 +13,7 @@ namespace TicTacToePlusWPF.Models
         public int WinCondition { get; set; } = 3;
         public int PlayerCount { get; set; } = 2;
         public List<char> PlayerSymbols { get; set; } = new() { 'X', 'O' };
+        public bool IsVsAi { get; set; } = false;
     }
 
 }
